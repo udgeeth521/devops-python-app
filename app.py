@@ -1,11 +1,17 @@
-from flask import Flask
+# Use a Python base image
+FROM python:3.9-slim
 
-app = Flask(__name__)
+# Set the location inside the container for your code
+WORKDIR /app
 
-@app.route('/')
-def home():
-    return "<h1>DevOps Pipeline Success!</h1><p>The Python App is running on the Docker Node.</p>"
+# Copy your app.py from GitHub into the container
+COPY . /app
 
-if __name__ == "__main__":
-    # host='0.0.0.0' is REQUIRED for Docker to let outside traffic in
-    app.run(host='0.0.0.0', port=8080)
+# Install the web server library (Flask)
+RUN pip install flask
+
+# Tell the container to listen on port 8080
+EXPOSE 8080
+
+# The command to start the server and KEEP IT RUNNING
+CMD ["python", "app.py"]
